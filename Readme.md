@@ -1,5 +1,9 @@
 # Colorful Comments
 
+修复vue中的注释问题
+
+![](./Images/2021-09-01-22-24-29.png)
+
 The Colorful Comments Extension will help you create more human-friendly comments in your code.  
 With this Extension, you will be able to categorise your cody by special colour into:
 * Red (!)

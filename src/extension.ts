@@ -1,61 +1,62 @@
-import * as vscode from 'vscode';
-import { Parser } from './parser';
+import * as vscode from "vscode";
+import { Parser } from "./parser";
 
-export function activate(context: vscode.ExtensionContext)
-{
-	let activeEditor: vscode.TextEditor | undefined;
-	let parser: Parser = new Parser();
+export function activate(context: vscode.ExtensionContext) {
+  let activeEditor: vscode.TextEditor | undefined;
+  let parser: Parser = new Parser();
 
-	let updateDecorations = function (useHash = false)
-	{
-		if (!activeEditor) return;
+  let updateDecorations = function (useHash = false) {
+    if (!activeEditor) return;
 
-		if (!parser.supportedLanguage) return;
+    if (!parser.supportedLanguage) return;
 
-		parser.FindSingleLineComments(activeEditor);
-		parser.FindBlockComments(activeEditor);
-		parser.FindJSDocComments(activeEditor);
-		parser.ApplyDecorations(activeEditor);
-	};
+    parser.FindSingleLineComments(activeEditor);
+    parser.FindBlockComments(activeEditor);
+    parser.FindJSDocComments(activeEditor);
+    parser.ApplyDecorations(activeEditor);
+  };
 
-	if (vscode.window.activeTextEditor)
-	{
-		activeEditor = vscode.window.activeTextEditor;
+  if (vscode.window.activeTextEditor) {
+    activeEditor = vscode.window.activeTextEditor;
 
-		parser.SetRegex(activeEditor.document.languageId);
+    parser.SetRegex(activeEditor.document.languageId);
 
-		triggerUpdateDecorations();
-	}
+    triggerUpdateDecorations();
+  }
 
-	vscode.window.onDidChangeActiveTextEditor( (editor) =>
-	{
-		activeEditor = editor;
-		
-		if (editor)
-		{
-			parser.SetRegex(editor.document.languageId);
+  vscode.window.onDidChangeActiveTextEditor(
+    (editor) => {
+      activeEditor = editor;
 
-			triggerUpdateDecorations();
-		}
-	}, null, context.subscriptions);
+      if (editor) {
+        parser.SetRegex(editor.document.languageId);
 
-	vscode.workspace.onDidChangeTextDocument( event =>
-	{
-		if (activeEditor && event.document === activeEditor.document) {
-			triggerUpdateDecorations();
-		}
-	}, null, context.subscriptions);
+        triggerUpdateDecorations();
+      }
+    },
+    null,
+    context.subscriptions
+  );
 
-	var timeout: NodeJS.Timer;
+  vscode.workspace.onDidChangeTextDocument(
+    (event) => {
+      if (activeEditor && event.document === activeEditor.document) {
+        triggerUpdateDecorations();
+      }
+    },
+    null,
+    context.subscriptions
+  );
 
-	function triggerUpdateDecorations()
-	{
-		if (timeout) {
-			clearTimeout(timeout);
-		}
+  var timeout: NodeJS.Timer;
 
-		timeout = setTimeout(updateDecorations, 200);
-	}
+  function triggerUpdateDecorations() {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+
+    timeout = setTimeout(updateDecorations, 200);
+  }
 }
 
-export function deactivate() { }
+export function deactivate() {}
