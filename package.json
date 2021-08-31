@@ -22,7 +22,8 @@
 		"Formatters"
 	],
 	"extensionKind": [
-		"ui","workspace"
+		"ui",
+		"workspace"
 	],
 	"activationEvents": [
 		"onLanguage:ada",
@@ -187,6 +188,7 @@
 		}
 	},
 	"scripts": {
+		"build-vsix": "vsce package",
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"lint": "eslint src --ext ts",
